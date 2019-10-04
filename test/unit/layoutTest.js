@@ -29,11 +29,11 @@ describe( 'layout' , function(){
 
   describe( '#find().send()' , function(){
     it('should return the correct record' , function ( done ){
-      var request  = layout.find({'id': test.findRecordID})
+      var request  = layout.find({'ID': test.findRecordID})
       request.send(function (err, result) {
         result.should.have.a.property('data')
             .that.is.an('array');
-        result.data[0].should.have.a.property('id')
+        result.data[0].should.have.a.property('ID')
             .that.equals(test.findRecordID);
         done()
       })

@@ -29,3 +29,5 @@ node_modules
 .idea
 
 /test/config.js
+
+.env

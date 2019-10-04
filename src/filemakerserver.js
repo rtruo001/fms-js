@@ -31,6 +31,7 @@ var connection = function (options) {
             .post(protocol + '://' + url + END_POINT)
             .auth(userName, password)
             .accept('xml')
+            .buffer(true)
             .parse(xml2jsParser);
         return post
     };
