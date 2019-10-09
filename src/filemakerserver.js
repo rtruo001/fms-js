@@ -5,13 +5,27 @@
 'use strict'
 
 var request = require('superagent');
-var xml2jsParser = require('superagent-xml2jsparser');
 var dbNamesRequest = require('./dbNamesRequest');
 var database = require('./database');
 
 var END_POINT = '/fmi/xml/fmresultset.xml'
 
-
+const parseString = require('xml2js').parseString;
+const parser = function (res, fn) {
+    res.text = '';
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) { res.text += chunk; });
+    res.on('end', function () {
+        let fmError, fmResult;
+        try {
+            parseString(res.text, (err, result) => { fmResult = !err ? result : null; });
+        }
+        catch (err) {
+            fmError = fmResult ? err : null;
+        }
+        fn(fmError, fmResult);
+    });
+};
 
 /**
  * creates a FMS Connection
@@ -32,7 +46,7 @@ var connection = function (options) {
             .auth(userName, password)
             .accept('xml')
             .buffer(true)
-            .parse(xml2jsParser);
+            .parse(parser);
         return post
     };
 
